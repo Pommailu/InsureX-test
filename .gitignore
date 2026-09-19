@@ -1,0 +1,23 @@
+# Environment
+.env
+.venv/
+env/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+
+# Databases & Vector Stores
+chroma_db/
+*.db-journal
+
+# Archives
+*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
+
