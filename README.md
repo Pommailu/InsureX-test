@@ -276,16 +276,3 @@ Assertion Results:
  • User B remembers Somying: True
  • User B context has NO leak of Somchai: True
 SUCCESS: Session Separation & Memory Isolation Verified 100%!
-```
-
----
-
-## 🏆 สรุปผลตามเกณฑ์การประเมิน (Evaluation Criteria Summary)
-
-| เกณฑ์การประเมิน | ผลการทำงานของระบบ |
-| :--- | :--- |
-| **RAG Precision** | ค้นหาจาก ChromaDB ด้วย Semantic Search + Distance Threshold ตอบเงื่อนไข กรมธรรม์ และโปรโมชั่นได้ตรงตามเอกสาร PDF 100% |
-| **Workflow Logic** | ออกแบบ StateGraph ใน LangGraph อย่างเป็นระบบ มีทั้ง Intent Routing, Conditional Edges, Loops สำหรับเก็บข้อมูลไม่ครบ และ Checkpointer |
-| **Data Integrity** | สกัดข้อมูลด้วย Pydantic Schema ตรวจสอบรูปแบบเบอร์โทรศัพท์และชื่ออย่างรัดกุม บันทึกลง SQLite สำเร็จครบถ้วน |
-| **Code Quality** | โค้ดแบ่งสัดส่วนชัดเจน (Modular Architecture), จัดการ Environment ผ่าน `.env`, มี Fallback Error Handling ครบทุกจุด |
-| **Bonus Tasks** | ทำครบทั้ง 2 ข้อ: ระบบ **MCP Tooling** พร้อมสเปกครบถ้วน และระบบ **Advanced Session Isolation** ที่ผ่านการทดสอบ 100% |
