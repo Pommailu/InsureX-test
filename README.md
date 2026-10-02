@@ -309,8 +309,8 @@ flowchart TD
 4. **ตาราง `agent_monthly_performance` (สรุปผลงานและการประเมิน KPI รายเดือน)**:
    - **ที่มา**: รัน Batch สรุปยอดขายจากตาราง `policy_sales` ในแต่ละเดือนและจัดกลุ่มรายตัวแทน (`GROUP BY agent_id, campaign_month`)
    - **ฟังก์ชันการคำนวณและ State Tracking**:
-     - `total_premium` = $\sum(\text{premium\_amount})$
-     - `new_policy_count` = $\text{Count}(\text{policy\_id})$
+     - `total_premium` = `SUM(premium_amount)` (ผลรวมเบี้ยประกันภัยทั้งหมดในเดือนนั้น)
+     - `new_policy_count` = `COUNT(policy_id)` (จำนวนกรมธรรม์ทั้งหมดที่ปิดการขายได้ในเดือนนั้น)
      - ตรวจสอบกฎเกณฑ์: `total_premium > 15,000` และ `new_policy_count > 5`
      - จัดการตัวนับต่อเนื่อง (Consecutive Counters): หากรอบนี้ Pass จะบวก `consecutive_pass_months` เพิ่ม 1 และรีเซ็ต `consecutive_fail_months` เป็น 0 (และในทางกลับกัน)
      - ตัดสินใจปรับสถานะสัญญา: หากสะสม Fail ครบ 3 เดือนจะเปลี่ยนสถานะเป็น `COMMISSION_BASED` และหากสะสม Pass ครบ 3 เดือนจะเปลี่ยนเป็น `SALARY_BASED`
@@ -345,14 +345,24 @@ flowchart TD
 - `COMMISSION_BASED`: ไม่มีเงินเดือนประจำ รับค่าตอบแทนตามผลงาน 100%
 
 ```mermaid
-stateDiagram-v2
-    [*] --> SALARY_BASED : เริ่มต้นสัญญาจ้างพนักงานประจำ
+flowchart TD
+    Start([🚀 เริ่มต้นสัญญาจ้างพนักงานประจำ]) --> StateSalary
 
-    SALARY_BASED --> COMMISSION_BASED : FAIL ติดต่อกัน 3 เดือน\n(consecutive_fail_months = 3)
-    COMMISSION_BASED --> SALARY_BASED : PASS ติดต่อกัน 3 เดือน\n(consecutive_pass_months = 3)
+    subgraph Contracts ["🔄 วัฏจักรการเปลี่ยนประเภทสัญญาจ้าง (State Transition Cycle)"]
+        direction TB
+        StateSalary["💼 SALARY_BASED\n(มีฐานเงินเดือนประจำ + ค่าคอมมิชชัน)"]
+        StateComm["📈 COMMISSION_BASED\n(ไม่มีเงินเดือนประจำ / ค่าคอมมิชชันตามผลงาน 100%)"]
 
-    SALARY_BASED --> SALARY_BASED : ประเมิน PASS หรือ FAIL < 3 เดือน
-    COMMISSION_BASED --> COMMISSION_BASED : ประเมิน FAIL หรือ PASS < 3 เดือน
+        StateSalary -->|"❌ FAIL ติดต่อกันครบ 3 เดือน\n(consecutive_fail_months = 3)"| StateComm
+        StateComm -->|"✅ PASS ติดต่อกันครบ 3 เดือน\n(consecutive_pass_months = 3)"| StateSalary
+    end
+
+    subgraph TransitionRules ["📋 เงื่อนไขและการคงสภาพสัญญา"]
+        direction TB
+        Rule1["• คงสภาพสัญญาเดิม: หากผลงานสลับ PASS/FAIL หรือยังไม่ครบ 3 เดือนต่อเนื่อง"]
+        Rule2["• รีเซ็ตตัวนับ (Counter Reset): เมื่อผลงานสลับสถานะ ตัวนับรอบจะถูกรีเซ็ตเป็น 0 ทันที"]
+        Rule3["• บันทึก Audit Log: เมื่อเกิดการเปลี่ยนสัญญา ข้อมูลจะถูกบันทึกเข้า agent_contract_history ทันที"]
+    end
 ```
 
 - **กฎการลดระดับ (Demotion)**:
