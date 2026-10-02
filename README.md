@@ -1,6 +1,6 @@
 # 🛡️ InsureX Unified Sales & Analytics Ecosystem
 
-ระบบบูรณาการอัจฉริยะสำหรับธุรกิจประกันภัย **InsureX** ครอบคลุมทั้ง **(1) ระบบ AI Sales Agent อัจฉริยะ** (พัฒนาด้วย LangChain, LangGraph, ChromaDB, Pydantic, SQLite, และ Model Context Protocol - MCP) และ **(2) ระบบวิเคราะห์แคมเปญและบริหารผลงานตัวแทนขาย (Performance & KPI Management)** ตามชุดข้อมูลในโฟลเดอร์ `Dataset Test Case #1`
+ระบบบูรณาการอัจฉริยะสำหรับธุรกิจประกันภัย **InsureX** ครอบคลุมทั้ง **(1) การวิเคราะห์แคมเปญและระบบบริหารผลงานตัวแทนขาย (Performance & KPI Management)** ตามชุดข้อมูลในโฟลเดอร์ `Dataset Test Case #1` และ **(2) ระบบ AI Sales Agent อัจฉริยะ** (พัฒนาด้วย LangChain, LangGraph, ChromaDB, Pydantic, SQLite, และ Model Context Protocol - MCP)
 
 ---
 
@@ -8,18 +8,18 @@
 
 1. [🌟 ภาพรวมระบบแบบบูรณาการ (Ecosystem Overview)](#-ภาพรวมระบบแบบบูรณาการ-ecosystem-overview)
 2. [🗂️ โครงสร้างโปรเจกต์ (Project Structure)](#️-โครงสร้างโปรเจกต์-project-structure)
-3. [🤖 ส่วนที่ 1: InsureX AI Sales Agent & Intelligent Assistant](#-ส่วนที่-1-insurex-ai-sales-agent--intelligent-assistant)
+3. [📊 ส่วนที่ 1: การวิเคราะห์แคมเปญและระบบบริหารสัญญาตัวแทน (Dataset Test Case #1)](#-ส่วนที่-1-การวิเคราะห์แคมเปญและระบบบริหารสัญญาตัวแทน-dataset-test-case-1)
+   - [ภาพรวมชุดข้อมูล (dsc_test_case.csv & Data Definition)](#ภาพรวมชุดข้อมูล-dsc_test_casecsv--data-definition)
+   - [แดชบอร์ดสรุปผลผู้บริหาร (complete_insurance_campaign_dashboard.xlsx)](#แดชบอร์ดสรุปผลผู้บริหาร-complete_insurance_campaign_dashboardxlsx)
+   - [สกีมาฐานข้อมูลและระบบประเมิน KPI (schema_kpi_contract.sql)](#สกีมาฐานข้อมูลและระบบประเมิน-kpi-schema_kpi_contractsql)
+   - [ขั้นตอนการประมวลผลข้อมูล (ETL & Evaluation Pipeline)](#ขั้นตอนการประมวลผลข้อมูล-etl--evaluation-pipeline)
+4. [🤖 ส่วนที่ 2: InsureX AI Sales Agent & Intelligent Assistant](#-ส่วนที่-2-insurex-ai-sales-agent--intelligent-assistant)
    - [จุดเด่นของระบบ AI Agent (Key Highlights)](#จุดเด่นของระบบ-ai-agent-key-highlights)
    - [สถาปัตยกรรมระบบ (LangGraph Workflow & State Machine)](#สถาปัตยกรรมระบบ-langgraph-workflow--state-machine)
    - [ขั้นตอนการติดตั้งและเริ่มต้นใช้งาน (Quickstart Guide)](#ขั้นตอนการติดตั้งและเริ่มต้นใช้งาน-quickstart-guide)
    - [วิธีการรันโปรแกรม (How to Run)](#วิธีการรันโปรแกรม-how-to-run)
    - [คู่มือการใช้งาน Tool และ MCP Server (Tooling Guide)](#คู่มือการใช้งาน-tool-และ-mcp-server-tooling-guide)
    - [ตัวอย่างผลการทดสอบจริง (Execution Demo Logs)](#ตัวอย่างผลการทดสอบจริง-execution-demo-logs)
-4. [📊 ส่วนที่ 2: การวิเคราะห์แคมเปญและระบบบริหารสัญญาตัวแทน (Dataset Test Case #1)](#-ส่วนที่-2-การวิเคราะห์แคมเปญและระบบบริหารสัญญาตัวแทน-dataset-test-case-1)
-   - [ภาพรวมชุดข้อมูล (dsc_test_case.csv & Data Definition)](#ภาพรวมชุดข้อมูล-dsc_test_casecsv--data-definition)
-   - [แดชบอร์ดสรุปผลผู้บริหาร (complete_insurance_campaign_dashboard.xlsx)](#แดชบอร์ดสรุปผลผู้บริหาร-complete_insurance_campaign_dashboardxlsx)
-   - [สกีมาฐานข้อมูลและระบบประเมิน KPI (schema_kpi_contract.sql)](#สกีมาฐานข้อมูลและระบบประเมิน-kpi-schema_kpi_contractsql)
-   - [ขั้นตอนการประมวลผลข้อมูล (ETL & Evaluation Pipeline)](#ขั้นตอนการประมวลผลข้อมูล-etl--evaluation-pipeline)
 5. [🚀 ส่วนที่ 3: การเชื่อมโยงข้อมูลสู่กลยุทธ์ธุรกิจ (Strategic Synergy)](#-ส่วนที่-3-การเชื่อมโยงข้อมูลสู่กลยุทธ์ธุรกิจ-strategic-synergy)
 6. [🏆 สรุปผลตามเกณฑ์การประเมิน (Evaluation Matrix)](#-สรุปผลตามเกณฑ์การประเมิน-evaluation-matrix)
 
@@ -27,7 +27,7 @@
 
 ## 🌟 ภาพรวมระบบแบบบูรณาการ (Ecosystem Overview)
 
-โปรเจกต์ InsureX ได้รับการออกแบบให้เชื่อมโยงระหว่าง **การปฏิบัติการขายหน้าร้าน (AI Operational Sales)** และ **การวิเคราะห์ข้อมูลหลังบ้าน (Data Analytics & BI Engine)** อย่างไร้รอยต่อ:
+โปรเจกต์ InsureX ได้รับการออกแบบให้เชื่อมโยงระหว่าง **การวิเคราะห์ข้อมูลหลังบ้าน (Data Analytics & BI Engine)** และ **การปฏิบัติการขายหน้าร้าน (AI Operational Sales)** อย่างไร้รอยต่อ:
 
 ```mermaid
 flowchart LR
@@ -55,17 +55,17 @@ flowchart LR
 
 ```text
 insureX test/
+├── Dataset Test Case #1/                             # ฐานข้อมูลแคมเปญ แดชบอร์ด และสกีมาประเมินผลตัวแทน
+│   ├── dsc_test_case.csv                             # ข้อมูลประวัติการโทรเสนอขายแคมเปญ 215,993 รายการ (26 ฟิลด์)
+│   ├── data definition.xlsx                          # พจนานุกรมข้อมูล (Data Dictionary) อธิบายทุกคอลัมน์
+│   ├── complete_insurance_campaign_dashboard.xlsx    # Executive BI Dashboard 4 ชีต พร้อมกราฟและผลวิเคราะห์
+│   └── schema_kpi_contract.sql                       # สกีมาฐานข้อมูลและระบบปรับเปลี่ยนประเภทสัญญาจ้างตาม KPI
 ├── data/                                             # โฟลเดอร์เก็บเอกสาร PDF ฐานความรู้ (ครบทั้ง 5 ฉบับ)
 │   ├── โปรโมชั่น _ ซื้อความคุ้มครอง ประกันภัย อุ่นใจ ประจำไตรมาส 3 อินชัวร์ เอกซ์ ( InsureX ).pdf
 │   ├── โปรโมชั่น _ วางแผนวันนี้ อุ่นใจทุกก้าวชัวร์ สมัครประกันชีวิตของ FWD รับสิทธิพิเศษ อินชัวร์ เอกซ์ ( InsureX ).pdf
 │   ├── โปรโมชั่น _ InsureX Free PA สำหรับลูกค้า FPC Worksite & Non CB อินชัวร์ เอกซ์ ( InsureX ).pdf
 │   ├── โปรโมชั่น _ สิทธิพิเศษ สำหรับครูและบุคลากรทางการศึกษาในสังกัดกระทรวงศึกษาธิการ อินชัวร์ เอกซ์ ( InsureX ).pdf
 │   └── โปรโมชั่น _ สิทธิพิเศษ สำหรับบุคลากรสาธารณสุขและอาสาสมัครสาธารณสุขประจำหมู่บ้าน (อสม.) ในสังกัดกระทรวงสาธารณสุข อินชัวร์ เอกซ์ ( InsureX ).pdf
-├── Dataset Test Case #1/                             # ฐานข้อมูลแคมเปญ แดชบอร์ด และสกีมาประเมินผลตัวแทน
-│   ├── dsc_test_case.csv                             # ข้อมูลประวัติการโทรเสนอขายแคมเปญ 215,993 รายการ (26 ฟิลด์)
-│   ├── data definition.xlsx                          # พจนานุกรมข้อมูล (Data Dictionary) อธิบายทุกคอลัมน์
-│   ├── complete_insurance_campaign_dashboard.xlsx    # Executive BI Dashboard 4 ชีต พร้อมกราฟและผลวิเคราะห์
-│   └── schema_kpi_contract.sql                       # สกีมาฐานข้อมูลและระบบปรับเปลี่ยนประเภทสัญญาจ้างตาม KPI
 ├── chroma_db/                                        # โฟลเดอร์ฐานข้อมูล Vector Store (ChromaDB)
 ├── leads.db                                          # ฐานข้อมูล SQLite สำหรับบันทึกข้อมูลลูกค้าที่สนใจ (Leads)
 ├── config.py                                         # การตั้งค่าระบบ และการโหลด Environment Variables
@@ -84,222 +84,7 @@ insureX test/
 
 ---
 
-## 🤖 ส่วนที่ 1: InsureX AI Sales Agent & Intelligent Assistant
-
-### จุดเด่นของระบบ AI Agent (Key Highlights)
-
-1. **RAG Knowledge Base ที่แม่นยำสูง (ChromaDB + Gemini Embeddings)**:
-   - สกัดและตัดแบ่งเนื้อหา (Semantic Chunking) จากเอกสารโปรโมชั่นและกรมธรรม์ประกันภัยของ InsureX (PDF 5 ฉบับ) พร้อมเก็บ Metadata อ้างอิงแหล่งที่มาและเลขหน้า
-   - กำหนดค่า Threshold ระยะห่าง (Distance Cutoff) เพื่อป้องกันอาการคิดไปเอง (Hallucination)
-   - **Error Handling อัตโนมัติ**: หากคำถามอยู่นอกเหนือฐานความรู้ ระบบจะแจ้งลูกค้าอย่างสุภาพ ไม่แต่งเติมข้อมูล พร้อมแนะนำช่องทางติดต่อ Call Center 1314 หรือผลิตภัณฑ์ที่เกี่ยวข้องทันที
-
-2. **Bonus Task 1: Structured Lead Collection (MCP / Tooling)**:
-   - **Mode Trigger**: ตรวจจับความสนใจของลูกค้า (เช่น *"สนใจสมัคร"*, *"ขอคำปรึกษา"*, *"ติดต่อกลับ"*) เพื่อเปลี่ยนโหมดเข้าสู่กระบวนการเก็บข้อมูลลูกค้า
-   - **Data Extraction**: สกัดข้อมูลจำเป็น 4 รายการ ได้แก่ **ชื่อ-นามสกุล, อาชีพ, รายได้ต่อเดือน, และเบอร์โทรศัพท์ติดต่อ**
-   - **Validation**: ตรวจสอบความถูกต้องด้วย **Pydantic Model** (`CustomerLead`) รวมถึงตรวจสอบรูปแบบเบอร์โทรศัพท์ไทย 10 หลัก
-   - **MCP Protocol & SQLite**: รองรับการเรียกใช้เครื่องมือตามมาตรฐาน **Model Context Protocol (MCP)** และบันทึกข้อมูลลูกค้าลงฐานข้อมูล **SQLite (`leads.db`)** โดยอัตโนมัติเมื่อข้อมูลครบถ้วน
-
-3. **Bonus Task 2: Advanced Session Management**:
-   - ควบคุม Context และ Memory แยกตามแต่ละผู้ใช้งานอย่างอิสระด้วย **LangGraph State Checkpointer** (`thread_id`)
-   - ป้องกันปัญหาข้อมูลลูกค้ารั่วไหลข้าม Session (Zero Context Bleed)
-   - สามารถสนทนาแบบต่อเนื่องหลายรอบ (Multi-turn Conversation) โดยระบบสามารถรวมข้อมูล (Merge partial lead) ที่ลูกค้าค่อยๆ ทยอยแจ้งเข้ามาในแต่ละรอบได้อย่างแม่นยำ
-
----
-
-### สถาปัตยกรรมระบบ (LangGraph Workflow & State Machine)
-
-ระบบควบคุมการทำงานด้วย **LangGraph StateGraph** ดังแผนภาพ:
-
-```mermaid
-flowchart TD
-    START([🚀 User Input]) --> RouteIntent["🧭 route_intent_node\n(วิเคราะห์เจตนาผู้ใช้)"]
-
-    %% Branching from Intent Router
-    RouteIntent -->|rag_inquiry| RAGNode["📚 rag_node\n(ค้นหา ChromaDB)"]
-    RouteIntent -->|product_interest / lead_info_provided| LeadExtractor["📋 lead_extractor_node\n(สกัดข้อมูล Pydantic)"]
-    RouteIntent -->|general_chat| ResponseGen["💬 response_generator_node\n(สังเคราะห์คำตอบ)"]
-    RouteIntent -->|out_of_scope| FallbackNode["⚠️ fallback_node\n(จัดการ Error Handling)"]
-
-    %% Branching from RAG Node
-    RAGNode -->|พบข้อมูลตรงตามเกณฑ์| ResponseGen
-    RAGNode -->|ไม่พบข้อมูล / ค่าความคล้ายต่ำ| FallbackNode
-
-    %% Branching from Lead Extractor Node
-    LeadExtractor -->|ข้อมูลครบ 4 ช่อง| SaveLeadTool["💾 save_lead_tool_node\n(บันทึกลง SQLite / MCP)"]
-    LeadExtractor -->|ข้อมูลยังไม่ครบ| ResponseGen
-
-    %% Convergence
-    SaveLeadTool --> ResponseGen
-    FallbackNode --> ResponseGen
-    ResponseGen --> END([🏁 AI Response])
-
-    %% Subgraph for State Checkpointer
-    subgraph SessionMemory ["🧠 Advanced Session Management (LangGraph MemorySaver)"]
-        State[("AgentState\n• messages (ประวัติแชท)\n• session_id\n• customer_intent\n• lead_info (Pydantic)\n• lead_saved (สถานะ)\n• retrieved_context")]
-    end
-```
-
-#### รายละเอียด Nodes ใน LangGraph:
-- **`route_intent_node`**: ใช้ LLM ร่วมกับ Context ประวัติและสถานะปัจจุบันในการจำแนก Intent (`rag_inquiry`, `product_interest`, `lead_info_provided`, `general_chat`, `out_of_scope`)
-- **`rag_node`**: ค้นหาข้อความที่เกี่ยวข้องใน ChromaDB ด้วย Cosine Distance หากค่าเกินเกณฑ์จะส่งต่อไปยัง `fallback_node`
-- **`lead_extractor_node`**: สกัดข้อมูลลูกค้าด้วย Structured Output เข้า Pydantic Model พร้อมฟังก์ชัน `merge_with()` เพื่อรวมข้อมูลเก่าและใหม่ในบทสนทนาหลายรอบ
-- **`save_lead_tool_node`**: ตรวจสอบความครบถ้วนของข้อมูล (ชื่อ, อาชีพ, รายได้, เบอร์ติดต่อ) แล้วเรียกเครื่องมือบันทึกลง SQLite
-- **`fallback_node`**: สร้างข้อความตอบกลับตามนโยบาย Error Handling อย่างสุภาพ ชัดเจน ไม่เดาข้อมูล
-- **`response_generator_node`**: สร้างคำตอบสุดท้ายที่มีความเป็นธรรมชาติ บุคลิก "น้องอินชัวร์" ที่ปรึกษาผู้เชี่ยวชาญ
-
----
-
-### ขั้นตอนการติดตั้งและเริ่มต้นใช้งาน (Quickstart Guide)
-
-#### 1. ติดตั้ง Dependencies
-แนะนำให้ใช้งานบน Python 3.10 - 3.13:
-```bash
-pip install -r requirements.txt
-```
-
-#### 2. กำหนดค่าตัวแปรใน `.env`
-สร้างหรือตรวจสอบไฟล์ `.env` ที่โฟลเดอร์ root:
-```ini
-GOOGLE_API_KEY=your_gemini_api_key_here
-GOOGLE_MODEL=gemini-3.5-flash-lite
-GOOGLE_EMBEDDING_MODEL=models/gemini-embedding-001
-CHROMA_PERSIST_DIR=./chroma_db
-SQLITE_DB_PATH=leads.db
-```
-
-#### 3. การสร้าง Index ฐานความรู้ (ChromaDB)
-เมื่อวางไฟล์ PDF ลงในโฟลเดอร์ `data/` แล้ว ให้รันคำสั่ง:
-```bash
-python rag_service.py --reindex
-```
-*(ระบบจะทำการอ่านไฟล์ PDF ทั้งหมดใน `data/`, แบ่งเป็น Semantic Chunks และสร้าง Embeddings บันทึกลง ChromaDB อัตโนมัติ)*
-
----
-
-### วิธีการรันโปรแกรม (How to Run)
-
-#### แบบที่ 1: รันชุดทดสอบความถูกต้องอัตโนมัติ (Automated Evaluation Test Suite)
-```bash
-python -X utf8 demo_test.py
-```
-**หัวข้อการทดสอบในชุดนี้ครอบคลุม 4 มิติ:**
-1. **RAG Precision**: ทดสอบตอบคำถามจากเอกสารโปรโมชั่นทั้ง 5 ฉบับ (เช่น ประกันชีวิต FWD, ประกันภัยอุ่นใจ ไตรมาส 3, สิทธิพิเศษสำหรับครูและบุคลากรทางการศึกษา, และ InsureX Free PA)
-2. **Error Handling**: ทดสอบคำถามที่อยู่นอกเหนือฐานความรู้ (เช่น ประกันยานอวกาศ, สูตรอาหาร)
-3. **Structured Lead Collection (MCP & SQLite)**: ทดสอบโหมด Trigger เมื่อลูกค้าสนใจ, การเก็บข้อมูลทีละรอบ (Multi-turn), และตรวจสอบผลใน SQLite
-4. **Advanced Session Management**: ทดสอบการสนทนาขนานกัน 2 เซสชัน (นายสมชาย vs พญ.สมหญิง) และยืนยันการจดจำบริบทโดยไม่มีข้อมูลรั่วไหลข้ามเซสชัน
-
----
-
-#### แบบที่ 2: รันโปรแกรมสนทนาจำลองสำหรับพนักงานขาย (Interactive CLI)
-```bash
-python -X utf8 main.py
-```
-**คำสั่งพิเศษในโหมด Interactive:**
-- `/session <id>`: สลับเซสชันเพื่อทดสอบการแยกบริบท (เช่น `/session user_02`)
-- `/leads`: ดูตารางข้อมูลลูกค้าทั้งหมดที่ถูกบันทึกลง SQLite
-- `/info`: ดูการตั้งค่า Model, Embedding และ Database ปัจจุบัน
-- `/test`: เรียกชุดทดสอบ Evaluation Suite ได้โดยตรงจากใน CLI
-- `/exit`: ออกจากโปรแกรม
-
----
-
-### คู่มือการใช้งาน Tool และ MCP Server (Tooling Guide)
-
-ระบบมี Tool สำหรับบันทึกและจัดการข้อมูลลูกค้า (Leads) ที่ได้มาตรฐาน รองรับทั้งการเรียกใช้ภายใน LangGraph Workflow, การเรียกใช้ทางโค้ด Python โดยตรง และการเปิดเป็น MCP Server:
-
-#### 1. การทำงานของ Tool ภายใน LangGraph (Automated Tool Calling)
-- เมื่อ Agent สนทนากับลูกค้าจนได้ข้อมูลครบ 4 ฟิลด์หลัก (`name`, `occupation`, `income`, `phone_number`)
-- ระบบจะแปลงข้อมูลเป็น Pydantic Model (`CustomerLead`) และส่งต่อให้ `save_lead_tool_node`
-- Tool จะถูกเรียกโดยอัตโนมัติเพื่อบันทึกข้อมูลลงตาราง `customer_leads` ในไฟล์ `leads.db`
-
-#### 2. การเรียกใช้ Tool โดยตรงผ่าน Python (Programmatic Usage)
-```python
-from mcp_server import save_customer_lead_tool
-
-result = save_customer_lead_tool.invoke({
-    "session_id": "session_demo_01",
-    "name": "นายกิตติศักดิ์ พัฒนกิจ",
-    "occupation": "ผู้จัดการฝ่ายไอที",
-    "income": "85,000 บาท/เดือน",
-    "phone_number": "0819876543",
-    "product_interest": "ประกันชีวิต FWD"
-})
-print(result)
-# Output: {"status": "success", "message": "Lead saved successfully", "lead_id": 1}
-```
-
-#### 3. การรันในฐานะ MCP Server (Model Context Protocol)
-ไฟล์ `mcp_server.py` พัฒนาตามมาตรฐาน MCP 2.x สามารถรันผ่าน stdio เพื่อเชื่อมต่อกับ Agent Framework หรือ Claude Desktop:
-```bash
-python mcp_server.py --stdio
-```
-
-**ตัวอย่างการนำไปตั้งค่าใน `claude_desktop_config.json`:**
-```json
-{
-  "mcpServers": {
-    "insurex-lead-collector": {
-      "command": "python",
-      "args": ["-X", "utf8", "c:/Users/USER/Desktop/insureX test/mcp_server.py", "--stdio"]
-    }
-  }
-}
-```
-
----
-
-### ตัวอย่างผลการทดสอบจริง (Execution Demo Logs)
-
-#### 1. RAG Precision (ความแม่นยำในการดึงข้อมูลตอบ)
-```text
-User Query: โปรโมชั่นประกันชีวิต FWD มีเงื่อนไขการผ่อน 0% กี่เดือน และมียอดชำระขั้นต่ำเท่าไหร่?
-Detected Intent: rag_inquiry | RAG Found: True
-
-[Sales Agent Response]:
-- ยอดชำระค่าเบี้ยประกันภัยปีแรกแบบรายปีผ่านบัตรเครดิตที่ร่วมรายการ ตั้งแต่ 30,000 บาทขึ้นไป / กรมธรรม์ / เซลล์สลิป
-- เลือกแบ่งชำระอัตราดอกเบี้ย 0% ได้นาน 6 เดือน และ 10 เดือน
-- บัตรที่ร่วมรายการ: CardX, SCB WEALTH by CardX และ CardX FLEX
-- เครดิตเงินคืนสูงสุด 3,000 บาท / เดือน และรับคะแนน PointX ตามเงื่อนไข
-```
-
-#### 2. Error Handling (กรณีหาคำตอบไม่พบ)
-```text
-User Query: ขอสอบถามอัตราเบี้ยประกันภัยยานอวกาศเดินทางไปดาวอังคารหน่อยครับ
-Detected Intent: out_of_scope | RAG Found: False | Error Status: NOT_FOUND
-
-[Graceful Error Handling Response]:
-ขออภัยครับ จากการตรวจสอบฐานข้อมูลเอกสารกรมธรรม์และโปรโมชั่นของ InsureX ในปัจจุบัน 
-ไม่พบข้อมูลตรงกับรายละเอียดที่ท่านสอบถามครับ
-ท่านสามารถสอบถามข้อมูลเพิ่มเติมเกี่ยวกับโปรโมชั่นอื่นๆ หรือติดต่อเจ้าหน้าที่ได้ที่ โทร. 1314 กด 0 ครับ
-```
-
-#### 3. Structured Lead Collection & SQLite Persistence
-```text
-Turn 1: สนใจสมัครโปรโมชั่นประกันชีวิต FWD มากครับ มีเจ้าหน้าที่ติดต่อกลับได้ไหม
-Agent: ขอบคุณที่สนใจครับ! ขอทราบข้อมูล: ชื่อ-นามสกุล, อาชีพ, รายได้ต่อเดือน, เบอร์ติดต่อ
-
-Turn 2: ผมชื่อ กิตติศักดิ์ พัฒนกิจ ทำงานเป็นผู้จัดการฝ่ายไอทีครับ
-Agent: ได้รับชื่อคุณกิตติศักดิ์ พัฒนกิจ (ผู้จัดการฝ่ายไอที) เรียบร้อยครับ ขอรายได้และเบอร์ติดต่อเพิ่มเติมครับ
-
-Turn 3: รายได้ 85,000 บาทครับ เบอร์โทร 081-987-6543 สะดวกช่วงบ่ายครับ
-Agent: บันทึกข้อมูลเรียบร้อย (อาชีพ: ผู้จัดการฝ่ายไอที, รายได้: 85,000 บาท, เบอร์ติดต่อ: 0819876543)
-[Database Check]: Record inserted into leads.db successfully!
-```
-
-#### 4. Advanced Session Management (Multi-user Isolation)
-```text
-User A (Somchai) Session: แจ้งชื่อ "สมชาย มั่งคั่ง", วิศวกร, 70,000 บาท, สนใจประกันชีวิต FWD
-User B (Somying) Session: แจ้งชื่อ "สมหญิง จริงใจ", แพทย์, 150,000 บาท, สนใจประกันภัยอุ่นใจ ไตรมาส 3
-
-Memory Recall Check:
-- User A ถาม: "จำได้ไหมว่าผมชื่ออะไร และสนใจประกันตัวไหน?" -> ตอบคุณสมชาย ถูกต้อง 100%
-- User B ถาม: "ช่วยสรุปข้อมูลของฉันที่แจ้งไปให้หน่อยค่ะ" -> ตอบคุณสมหญิง ถูกต้อง 100%
-- ตรวจสอบ Context Leak: User A ไม่มีข้อมูล User B และ User B ไม่มีข้อมูล User A (Zero Leak 100%)
-```
-
----
-
-## 📊 ส่วนที่ 2: การวิเคราะห์แคมเปญและระบบบริหารสัญญาตัวแทน (Dataset Test Case #1)
+## 📊 ส่วนที่ 1: การวิเคราะห์แคมเปญและระบบบริหารสัญญาตัวแทน (Dataset Test Case #1)
 
 โฟลเดอร์ `Dataset Test Case #1` คือชุดข้อมูลและโมเดลการประเมินผลการดำเนินงานจริงของแคมเปญประกันภัย เชื่อมโยงระเบียบวิธีทางสถิติเข้ากับระบบบริหารบุคลากรขายของ InsureX
 
@@ -579,6 +364,221 @@ FROM MonthlyAgg m;
 
 ---
 
+## 🤖 ส่วนที่ 2: InsureX AI Sales Agent & Intelligent Assistant
+
+### จุดเด่นของระบบ AI Agent (Key Highlights)
+
+1. **RAG Knowledge Base ที่แม่นยำสูง (ChromaDB + Gemini Embeddings)**:
+   - สกัดและตัดแบ่งเนื้อหา (Semantic Chunking) จากเอกสารโปรโมชั่นและกรมธรรม์ประกันภัยของ InsureX (PDF 5 ฉบับ) พร้อมเก็บ Metadata อ้างอิงแหล่งที่มาและเลขหน้า
+   - กำหนดค่า Threshold ระยะห่าง (Distance Cutoff) เพื่อป้องกันอาการคิดไปเอง (Hallucination)
+   - **Error Handling อัตโนมัติ**: หากคำถามอยู่นอกเหนือฐานความรู้ ระบบจะแจ้งลูกค้าอย่างสุภาพ ไม่แต่งเติมข้อมูล พร้อมแนะนำช่องทางติดต่อ Call Center 1314 หรือผลิตภัณฑ์ที่เกี่ยวข้องทันที
+
+2. **Bonus Task 1: Structured Lead Collection (MCP / Tooling)**:
+   - **Mode Trigger**: ตรวจจับความสนใจของลูกค้า (เช่น *"สนใจสมัคร"*, *"ขอคำปรึกษา"*, *"ติดต่อกลับ"*) เพื่อเปลี่ยนโหมดเข้าสู่กระบวนการเก็บข้อมูลลูกค้า
+   - **Data Extraction**: สกัดข้อมูลจำเป็น 4 รายการ ได้แก่ **ชื่อ-นามสกุล, อาชีพ, รายได้ต่อเดือน, และเบอร์โทรศัพท์ติดต่อ**
+   - **Validation**: ตรวจสอบความถูกต้องด้วย **Pydantic Model** (`CustomerLead`) รวมถึงตรวจสอบรูปแบบเบอร์โทรศัพท์ไทย 10 หลัก
+   - **MCP Protocol & SQLite**: รองรับการเรียกใช้เครื่องมือตามมาตรฐาน **Model Context Protocol (MCP)** และบันทึกข้อมูลลูกค้าลงฐานข้อมูล **SQLite (`leads.db`)** โดยอัตโนมัติเมื่อข้อมูลครบถ้วน
+
+3. **Bonus Task 2: Advanced Session Management**:
+   - ควบคุม Context และ Memory แยกตามแต่ละผู้ใช้งานอย่างอิสระด้วย **LangGraph State Checkpointer** (`thread_id`)
+   - ป้องกันปัญหาข้อมูลลูกค้ารั่วไหลข้าม Session (Zero Context Bleed)
+   - สามารถสนทนาแบบต่อเนื่องหลายรอบ (Multi-turn Conversation) โดยระบบสามารถรวมข้อมูล (Merge partial lead) ที่ลูกค้าค่อยๆ ทยอยแจ้งเข้ามาในแต่ละรอบได้อย่างแม่นยำ
+
+---
+
+### สถาปัตยกรรมระบบ (LangGraph Workflow & State Machine)
+
+ระบบควบคุมการทำงานด้วย **LangGraph StateGraph** ดังแผนภาพ:
+
+```mermaid
+flowchart TD
+    START([🚀 User Input]) --> RouteIntent["🧭 route_intent_node\n(วิเคราะห์เจตนาผู้ใช้)"]
+
+    %% Branching from Intent Router
+    RouteIntent -->|rag_inquiry| RAGNode["📚 rag_node\n(ค้นหา ChromaDB)"]
+    RouteIntent -->|product_interest / lead_info_provided| LeadExtractor["📋 lead_extractor_node\n(สกัดข้อมูล Pydantic)"]
+    RouteIntent -->|general_chat| ResponseGen["💬 response_generator_node\n(สังเคราะห์คำตอบ)"]
+    RouteIntent -->|out_of_scope| FallbackNode["⚠️ fallback_node\n(จัดการ Error Handling)"]
+
+    %% Branching from RAG Node
+    RAGNode -->|พบข้อมูลตรงตามเกณฑ์| ResponseGen
+    RAGNode -->|ไม่พบข้อมูล / ค่าความคล้ายต่ำ| FallbackNode
+
+    %% Branching from Lead Extractor Node
+    LeadExtractor -->|ข้อมูลครบ 4 ช่อง| SaveLeadTool["💾 save_lead_tool_node\n(บันทึกลง SQLite / MCP)"]
+    LeadExtractor -->|ข้อมูลยังไม่ครบ| ResponseGen
+
+    %% Convergence
+    SaveLeadTool --> ResponseGen
+    FallbackNode --> ResponseGen
+    ResponseGen --> END([🏁 AI Response])
+
+    %% Subgraph for State Checkpointer
+    subgraph SessionMemory ["🧠 Advanced Session Management (LangGraph MemorySaver)"]
+        State[("AgentState\n• messages (ประวัติแชท)\n• session_id\n• customer_intent\n• lead_info (Pydantic)\n• lead_saved (สถานะ)\n• retrieved_context")]
+    end
+```
+
+#### รายละเอียด Nodes ใน LangGraph:
+- **`route_intent_node`**: ใช้ LLM ร่วมกับ Context ประวัติและสถานะปัจจุบันในการจำแนก Intent (`rag_inquiry`, `product_interest`, `lead_info_provided`, `general_chat`, `out_of_scope`)
+- **`rag_node`**: ค้นหาข้อความที่เกี่ยวข้องใน ChromaDB ด้วย Cosine Distance หากค่าเกินเกณฑ์จะส่งต่อไปยัง `fallback_node`
+- **`lead_extractor_node`**: สกัดข้อมูลลูกค้าด้วย Structured Output เข้า Pydantic Model พร้อมฟังก์ชัน `merge_with()` เพื่อรวมข้อมูลเก่าและใหม่ในบทสนทนาหลายรอบ
+- **`save_lead_tool_node`**: ตรวจสอบความครบถ้วนของข้อมูล (ชื่อ, อาชีพ, รายได้, เบอร์ติดต่อ) แล้วเรียกเครื่องมือบันทึกลง SQLite
+- **`fallback_node`**: สร้างข้อความตอบกลับตามนโยบาย Error Handling อย่างสุภาพ ชัดเจน ไม่เดาข้อมูล
+- **`response_generator_node`**: สร้างคำตอบสุดท้ายที่มีความเป็นธรรมชาติ บุคลิก "น้องอินชัวร์" ที่ปรึกษาผู้เชี่ยวชาญ
+
+---
+
+### ขั้นตอนการติดตั้งและเริ่มต้นใช้งาน (Quickstart Guide)
+
+#### 1. ติดตั้ง Dependencies
+แนะนำให้ใช้งานบน Python 3.10 - 3.13:
+```bash
+pip install -r requirements.txt
+```
+
+#### 2. กำหนดค่าตัวแปรใน `.env`
+สร้างหรือตรวจสอบไฟล์ `.env` ที่โฟลเดอร์ root:
+```ini
+GOOGLE_API_KEY=your_gemini_api_key_here
+GOOGLE_MODEL=gemini-3.5-flash-lite
+GOOGLE_EMBEDDING_MODEL=models/gemini-embedding-001
+CHROMA_PERSIST_DIR=./chroma_db
+SQLITE_DB_PATH=leads.db
+```
+
+#### 3. การสร้าง Index ฐานความรู้ (ChromaDB)
+เมื่อวางไฟล์ PDF ลงในโฟลเดอร์ `data/` แล้ว ให้รันคำสั่ง:
+```bash
+python rag_service.py --reindex
+```
+*(ระบบจะทำการอ่านไฟล์ PDF ทั้งหมดใน `data/`, แบ่งเป็น Semantic Chunks และสร้าง Embeddings บันทึกลง ChromaDB อัตโนมัติ)*
+
+---
+
+### วิธีการรันโปรแกรม (How to Run)
+
+#### แบบที่ 1: รันชุดทดสอบความถูกต้องอัตโนมัติ (Automated Evaluation Test Suite)
+```bash
+python -X utf8 demo_test.py
+```
+**หัวข้อการทดสอบในชุดนี้ครอบคลุม 4 มิติ:**
+1. **RAG Precision**: ทดสอบตอบคำถามจากเอกสารโปรโมชั่นทั้ง 5 ฉบับ (เช่น ประกันชีวิต FWD, ประกันภัยอุ่นใจ ไตรมาส 3, สิทธิพิเศษสำหรับครูและบุคลากรทางการศึกษา, และ InsureX Free PA)
+2. **Error Handling**: ทดสอบคำถามที่อยู่นอกเหนือฐานความรู้ (เช่น ประกันยานอวกาศ, สูตรอาหาร)
+3. **Structured Lead Collection (MCP & SQLite)**: ทดสอบโหมด Trigger เมื่อลูกค้าสนใจ, การเก็บข้อมูลทีละรอบ (Multi-turn), และตรวจสอบผลใน SQLite
+4. **Advanced Session Management**: ทดสอบการสนทนาขนานกัน 2 เซสชัน (นายสมชาย vs พญ.สมหญิง) และยืนยันการจดจำบริบทโดยไม่มีข้อมูลรั่วไหลข้ามเซสชัน
+
+---
+
+#### แบบที่ 2: รันโปรแกรมสนทนาจำลองสำหรับพนักงานขาย (Interactive CLI)
+```bash
+python -X utf8 main.py
+```
+**คำสั่งพิเศษในโหมด Interactive:**
+- `/session <id>`: สลับเซสชันเพื่อทดสอบการแยกบริบท (เช่น `/session user_02`)
+- `/leads`: ดูตารางข้อมูลลูกค้าทั้งหมดที่ถูกบันทึกลง SQLite
+- `/info`: ดูการตั้งค่า Model, Embedding และ Database ปัจจุบัน
+- `/test`: เรียกชุดทดสอบ Evaluation Suite ได้โดยตรงจากใน CLI
+- `/exit`: ออกจากโปรแกรม
+
+---
+
+### คู่มือการใช้งาน Tool และ MCP Server (Tooling Guide)
+
+ระบบมี Tool สำหรับบันทึกและจัดการข้อมูลลูกค้า (Leads) ที่ได้มาตรฐาน รองรับทั้งการเรียกใช้ภายใน LangGraph Workflow, การเรียกใช้ทางโค้ด Python โดยตรง และการเปิดเป็น MCP Server:
+
+#### 1. การทำงานของ Tool ภายใน LangGraph (Automated Tool Calling)
+- เมื่อ Agent สนทนากับลูกค้าจนได้ข้อมูลครบ 4 ฟิลด์หลัก (`name`, `occupation`, `income`, `phone_number`)
+- ระบบจะแปลงข้อมูลเป็น Pydantic Model (`CustomerLead`) และส่งต่อให้ `save_lead_tool_node`
+- Tool จะถูกเรียกโดยอัตโนมัติเพื่อบันทึกข้อมูลลงตาราง `customer_leads` ในไฟล์ `leads.db`
+
+#### 2. การเรียกใช้ Tool โดยตรงผ่าน Python (Programmatic Usage)
+```python
+from mcp_server import save_customer_lead_tool
+
+result = save_customer_lead_tool.invoke({
+    "session_id": "session_demo_01",
+    "name": "นายกิตติศักดิ์ พัฒนกิจ",
+    "occupation": "ผู้จัดการฝ่ายไอที",
+    "income": "85,000 บาท/เดือน",
+    "phone_number": "0819876543",
+    "product_interest": "ประกันชีวิต FWD"
+})
+print(result)
+# Output: {"status": "success", "message": "Lead saved successfully", "lead_id": 1}
+```
+
+#### 3. การรันในฐานะ MCP Server (Model Context Protocol)
+ไฟล์ `mcp_server.py` พัฒนาตามมาตรฐาน MCP 2.x สามารถรันผ่าน stdio เพื่อเชื่อมต่อกับ Agent Framework หรือ Claude Desktop:
+```bash
+python mcp_server.py --stdio
+```
+
+**ตัวอย่างการนำไปตั้งค่าใน `claude_desktop_config.json`:**
+```json
+{
+  "mcpServers": {
+    "insurex-lead-collector": {
+      "command": "python",
+      "args": ["-X", "utf8", "c:/Users/USER/Desktop/insureX test/mcp_server.py", "--stdio"]
+    }
+  }
+}
+```
+
+---
+
+### ตัวอย่างผลการทดสอบจริง (Execution Demo Logs)
+
+#### 1. RAG Precision (ความแม่นยำในการดึงข้อมูลตอบ)
+```text
+User Query: โปรโมชั่นประกันชีวิต FWD มีเงื่อนไขการผ่อน 0% กี่เดือน และมียอดชำระขั้นต่ำเท่าไหร่?
+Detected Intent: rag_inquiry | RAG Found: True
+
+[Sales Agent Response]:
+- ยอดชำระค่าเบี้ยประกันภัยปีแรกแบบรายปีผ่านบัตรเครดิตที่ร่วมรายการ ตั้งแต่ 30,000 บาทขึ้นไป / กรมธรรม์ / เซลล์สลิป
+- เลือกแบ่งชำระอัตราดอกเบี้ย 0% ได้นาน 6 เดือน และ 10 เดือน
+- บัตรที่ร่วมรายการ: CardX, SCB WEALTH by CardX และ CardX FLEX
+- เครดิตเงินคืนสูงสุด 3,000 บาท / เดือน และรับคะแนน PointX ตามเงื่อนไข
+```
+
+#### 2. Error Handling (กรณีหาคำตอบไม่พบ)
+```text
+User Query: ขอสอบถามอัตราเบี้ยประกันภัยยานอวกาศเดินทางไปดาวอังคารหน่อยครับ
+Detected Intent: out_of_scope | RAG Found: False | Error Status: NOT_FOUND
+
+[Graceful Error Handling Response]:
+ขออภัยครับ จากการตรวจสอบฐานข้อมูลเอกสารกรมธรรม์และโปรโมชั่นของ InsureX ในปัจจุบัน 
+ไม่พบข้อมูลตรงกับรายละเอียดที่ท่านสอบถามครับ
+ท่านสามารถสอบถามข้อมูลเพิ่มเติมเกี่ยวกับโปรโมชั่นอื่นๆ หรือติดต่อเจ้าหน้าที่ได้ที่ โทร. 1314 กด 0 ครับ
+```
+
+#### 3. Structured Lead Collection & SQLite Persistence
+```text
+Turn 1: สนใจสมัครโปรโมชั่นประกันชีวิต FWD มากครับ มีเจ้าหน้าที่ติดต่อกลับได้ไหม
+Agent: ขอบคุณที่สนใจครับ! ขอทราบข้อมูล: ชื่อ-นามสกุล, อาชีพ, รายได้ต่อเดือน, เบอร์ติดต่อ
+
+Turn 2: ผมชื่อ กิตติศักดิ์ พัฒนกิจ ทำงานเป็นผู้จัดการฝ่ายไอทีครับ
+Agent: ได้รับชื่อคุณกิตติศักดิ์ พัฒนกิจ (ผู้จัดการฝ่ายไอที) เรียบร้อยครับ ขอรายได้และเบอร์ติดต่อเพิ่มเติมครับ
+
+Turn 3: รายได้ 85,000 บาทครับ เบอร์โทร 081-987-6543 สะดวกช่วงบ่ายครับ
+Agent: บันทึกข้อมูลเรียบร้อย (อาชีพ: ผู้จัดการฝ่ายไอที, รายได้: 85,000 บาท, เบอร์ติดต่อ: 0819876543)
+[Database Check]: Record inserted into leads.db successfully!
+```
+
+#### 4. Advanced Session Management (Multi-user Isolation)
+```text
+User A (Somchai) Session: แจ้งชื่อ "สมชาย มั่งคั่ง", วิศวกร, 70,000 บาท, สนใจประกันชีวิต FWD
+User B (Somying) Session: แจ้งชื่อ "สมหญิง จริงใจ", แพทย์, 150,000 บาท, สนใจประกันภัยอุ่นใจ ไตรมาส 3
+
+Memory Recall Check:
+- User A ถาม: "จำได้ไหมว่าผมชื่ออะไร และสนใจประกันตัวไหน?" -> ตอบคุณสมชาย ถูกต้อง 100%
+- User B ถาม: "ช่วยสรุปข้อมูลของฉันที่แจ้งไปให้หน่อยค่ะ" -> ตอบคุณสมหญิง ถูกต้อง 100%
+- ตรวจสอบ Context Leak: User A ไม่มีข้อมูล User B และ User B ไม่มีข้อมูล User A (Zero Leak 100%)
+```
+
+---
+
 ## 🚀 ส่วนที่ 3: การเชื่อมโยงข้อมูลสู่กลยุทธ์ธุรกิจ (Strategic Synergy)
 
 การบูรณาการผลวิเคราะห์จาก **Dataset Test Case #1** ร่วมกับ **InsureX AI Sales Agent** ก่อให้เกิดกลยุทธ์ทางธุรกิจที่มีประสิทธิภาพสูงสุด 3 ด้าน:
@@ -607,14 +607,14 @@ FROM MonthlyAgg m;
 
 | หมวดหมู่ | เกณฑ์การประเมิน | ผลลัพธ์และการส่งมอบในโปรเจกต์ | สถานะ |
 | :--- | :--- | :--- | :---: |
+| **Dataset #1** | **Campaign Dashboard**| วิเคราะห์ 215,993 ข้อมูล สร้าง Executive BI Dashboard 4 ชีต สรุป Conversion Rate และพฤติกรรมลูกค้า | ✅ สมบูรณ์ |
+| **Dataset #1** | **KPI & Contract Engine**| สกีมา 3NF Relational DB (`schema_kpi_contract.sql`) พร้อมเงื่อนไขประเมินผลงานและปรับสัญญาจ้างอัตโนมัติ | ✅ สมบูรณ์ |
 | **AI Agent** | **RAG Precision** | ค้นหาจาก ChromaDB ด้วย Semantic Chunking + Threshold ตอบคำถามโปรโมชั่นทั้ง 5 ฉบับได้ถูกต้อง 100% | ✅ ผ่าน |
 | **AI Agent** | **Workflow Logic** | ออกแบบ StateGraph ใน LangGraph พร้อม Intent Routing, Conditional Edges, และ Loop การเก็บข้อมูล | ✅ ผ่าน |
 | **AI Agent** | **Data Integrity** | สกัดข้อมูลเข้า Pydantic Model ตรวจสอบรูปแบบเบอร์โทร 10 หลัก และบันทึกลง SQLite อัตโนมัติ | ✅ ผ่าน |
 | **AI Agent** | **Code Quality** | สถาปัตยกรรมแบบ Modular, มี Fallback Error Handling แจ้ง Call Center 1314 อย่างสุภาพ | ✅ ผ่าน |
 | **Bonus Tasks**| **MCP Tooling** | รองรับมาตรฐาน Model Context Protocol (MCP 2.x) ทั้งในฐานะ LangChain Tool และ MCP Server | ✅ สมบูรณ์ |
 | **Bonus Tasks**| **Session Separation**| ควบคุม State แยกราย User ด้วย LangGraph Checkpointer (`thread_id`) ปราศจากการรั่วไหลของข้อมูล | ✅ สมบูรณ์ |
-| **Dataset #1** | **Campaign Dashboard**| วิเคราะห์ 215,993 ข้อมูล สร้าง Executive BI Dashboard 4 ชีต สรุป Conversion Rate และพฤติกรรมลูกค้า | ✅ สมบูรณ์ |
-| **Dataset #1** | **KPI & Contract Engine**| สกีมา 3NF Relational DB (`schema_kpi_contract.sql`) พร้อมเงื่อนไขประเมินผลงานและปรับสัญญาจ้างอัตโนมัติ | ✅ สมบูรณ์ |
 | **Integration**| **End-to-End Synergy** | เชื่อมโยง Data Analytics เข้ากับระบบจ่ายงานตัวแทน และนำผลตอบรับกลับมาพัฒนา AI Sales Pipeline | ✅ สมบูรณ์ |
 
 ---
