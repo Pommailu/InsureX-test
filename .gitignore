@@ -17,7 +17,9 @@ chroma_db/
 # Archives
 *.zip
 
-# OS files
+# OS and Office temp files
 .DS_Store
 Thumbs.db
+~$*
+
 
