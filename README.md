@@ -12,6 +12,9 @@
    - [ภาพรวมชุดข้อมูล (dsc_test_case.csv & Data Definition)](#ภาพรวมชุดข้อมูล-dsc_test_casecsv--data-definition)
    - [แดชบอร์ดสรุปผลผู้บริหาร (complete_insurance_campaign_dashboard.xlsx)](#แดชบอร์ดสรุปผลผู้บริหาร-complete_insurance_campaign_dashboardxlsx)
    - [สกีมาฐานข้อมูลและระบบประเมิน KPI (schema_kpi_contract.sql)](#สกีมาฐานข้อมูลและระบบประเมิน-kpi-schema_kpi_contractsql)
+     - [ที่มาและเหตุผลในการออกแบบแต่ละตาราง (Table Lineage & Design Rationale)](#1-ที่มาและเหตุผลในการออกแบบแต่ละตาราง-table-lineage--design-rationale)
+     - [กฎการประเมิน KPI รายเดือน (Monthly Validation Rules)](#2-กฎการประเมิน-kpi-รายเดือน-monthly-validation-rules)
+     - [กลไกการปรับเปลี่ยนประเภทสัญญาจ้างอัตโนมัติ (Automated State Transitions)](#3-กลไกการปรับเปลี่ยนประเภทสัญญาจ้างอัตโนมัติ-automated-state-transitions)
    - [ขั้นตอนการประมวลผลข้อมูล (ETL & Evaluation Pipeline)](#ขั้นตอนการประมวลผลข้อมูล-etl--evaluation-pipeline)
 4. [🤖 ส่วนที่ 2: InsureX AI Sales Agent & Intelligent Assistant](#-ส่วนที่-2-insurex-ai-sales-agent--intelligent-assistant)
    - [จุดเด่นของระบบ AI Agent (Key Highlights)](#จุดเด่นของระบบ-ai-agent-key-highlights)
@@ -256,7 +259,69 @@ erDiagram
     }
 ```
 
-#### 1. กฎการประเมิน KPI รายเดือน (Monthly Validation Rules)
+#### 1. ที่มาและเหตุผลในการออกแบบแต่ละตาราง (Table Lineage & Design Rationale)
+
+โครงสร้างฐานข้อมูลทั้ง 5 ตารางถูกออกแบบตามหลักการ **3NF (Third Normal Form)** เพื่อแยกหน้าที่ (Separation of Concerns) อย่างชัดเจนระหว่างข้อมูลตัวแทนขาย, รายชื่อลูกค้าจากแคมเปญ, ธุรกรรมการเงิน, และประวัติการประเมินผลงาน:
+
+```mermaid
+flowchart TD
+    HR["🏢 ระบบ HR & Master Data"] -->|1. ข้อมูลตัวแทนและสัญญาจ้าง| T1[("1. agents\n(ตารางตัวแทนขายหลัก)")]
+    
+    CSV["📂 dsc_test_case.csv\n(215,993 Leads)"] -->|2. นำเข้าข้อมูลแคมเปญ & ผูก Assigned Agent| T2[("2. campaign_leads\n(ตารางรายชื่อลูกค้าที่โทรติดต่อ)")]
+    
+    T2 -->|3. สกัดเฉพาะผู้ตอบรับ label in 1, 2| T3[("3. policy_sales\n(ตารางบันทึกการขายกรมธรรม์)")]
+    T1 -->|อ้างอิง agent_id ผู้ปิดการขาย| T3
+    
+    T3 -->|4. รวมยอดขายรายเดือน Group By Agent & Month| T4[("4. agent_monthly_performance\n(ตารางสรุปผลงาน & วัดเกณฑ์ KPI)")]
+    T1 -->|ตรวจสอบสัญญาเดิม & อัปเดตสัญญาใหม่| T4
+    
+    T4 -->|5. Triggered เมื่อ contract_changed = TRUE\nครบเงื่อนไข Pass/Fail 3 เดือนติด| T5[("5. agent_contract_history\n(ตาราง Audit Log ประวัติการเปลี่ยนสัญญา)")]
+```
+
+| ลำดับ | ตาราง (Table) | แหล่งที่มาของข้อมูล (Data Origin) | หน้าที่และข้อมูลหลักที่จัดเก็บ | เหตุผลและความจำเป็นในการออกแบบ (Design Rationale) |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | **`agents`** | **ระบบบริหารงานบุคคล (HR Master Data)** | เก็บข้อมูลตัวตนตัวแทนขาย (`agent_id`, `agent_code`, `full_name`) สถานะสัญญาจ้างปัจจุบัน (`SALARY_BASED` / `COMMISSION_BASED`) และวันเริ่มสัญญา | เป็น **Master Table (1-to-Many)** ที่เป็นจุดศูนย์กลางในการกระจายงานลูกค้า และเป็น Entity อ้างอิงสำหรับประเมินผลงานของพนักงานขายแต่ละคน |
+| **2** | **`campaign_leads`** | **ไฟล์ `dsc_test_case.csv` (215,993 แถว)** | เก็บประวัติและพฤติกรรมลูกค้าจากแคมเปญ (`income`, `savacc_bal`, `customer_segment`, ผลการโทร `label`) เพิ่มฟิลด์ `lead_id` และ `assigned_agent_id` | แปลงข้อมูลดิบ Flat File (CSV) ให้เป็น **Staging Relational Table** เพื่อจำลองการจ่ายรายชื่อ (Lead Distribution) ให้ตัวแทนขายโทรติดต่อเสนอขายจริง |
+| **3** | **`policy_sales`** | **สร้างอัตโนมัติจาก `campaign_leads` ที่ `label IN (1, 2)`** | บันทึกธุรกรรมการขายที่สำเร็จ (`policy_number`, `product_type`, `premium_amount`, `issue_date`) เชื่อมโยงกับ `lead_id` และ `agent_id` | แยก **ข้อมูลการตลาด (Leads)** ออกจาก **ธุรกรรมทางการเงิน (Financial Transaction)** ตามหลัก 3NF เพื่อเป็น Single Source of Truth สำหรับคำนวณเบี้ยประกัน |
+| **4** | **`agent_monthly_performance`** | **คำนวณ Rollup จาก `policy_sales` รายเดือน** | เก็บผลรวมยอดขาย (`total_premium`, `new_policy_count`) ผลการวัดเกณฑ์ (`validation_result`), ตัวนับสะสม (`consecutive_pass/fail`), และสถานะสัญญา | ทำหน้าที่เป็น **Fact / Snapshot Table** ประจำเดือน ทำให้ระบบตรวจสอบผลงานย้อนหลังได้ทันที โดยไม่ต้องคำนวณ Aggregation ใหม่จากข้อมูลดิบทุกครั้ง |
+| **5** | **`agent_contract_history`** | **สร้างอัตโนมัติผ่าน Trigger จาก `agent_monthly_performance`** | เก็บรหัสตัวแทน, สัญญาเดิม, สัญญาใหม่, เดือนที่มีผล, และสาเหตุการปรับเปลี่ยน (`change_reason`) | ทำหน้าที่เป็น **Immutable Audit Log** ตามหลักธรรมาภิบาลข้อมูล (Data Governance) และกฎหมายแรงงาน เพื่อเก็บหลักฐานการปรับลด/เลื่อนสัญญาอย่างโปร่งใส |
+
+---
+
+##### 🔍 รายละเอียดและกระบวนการเกิดของแต่ละตาราง:
+
+1. **ตาราง `agents` (ข้อมูลตัวแทนขายและสัญญาปัจจุบัน)**:
+   - **ที่มา**: เริ่มต้นจากระบบ HR Master Data ของบริษัท ซึ่งบันทึกพนักงานขายทุกคน
+   - **ความสัมพันธ์**: เชื่อมโยงแบบ One-to-Many กับ `campaign_leads` (เพื่อมอบหมายงาน), `policy_sales` (เพื่อบันทึกยอดขาย), และ `agent_monthly_performance` (เพื่อบันทึกประวัติการประเมิน)
+   - **กลไกการอัปเดต**: ฟิลด์ `current_contract_type` และ `contract_effective_date` จะถูกอัปเดตอัตโนมัติเมื่อระบบประเมิน KPI พบเงื่อนไขการเปลี่ยนสัญญา
+
+2. **ตาราง `campaign_leads` (รายชื่อลูกค้าแคมเปญ)**:
+   - **ที่มา**: แปลงและนำเข้าข้อมูลดิบ 215,993 แถวจาก `dsc_test_case.csv` เข้าสู่ฐานข้อมูล
+   - **การเพิ่มมิติทางธุรกิจ**: ในไฟล์ CSV มีเฉพาะข้อมูลลูกค้า แต่ยังไม่มีการมอบหมายงาน ระบบจึงเพิ่มฟิลด์ `lead_id` (Primary Key Auto-increment) และ `assigned_agent_id` (Foreign Key เชื่อมกับ `agents`) เพื่อจำลองการจ่ายรายชื่อให้ตัวแทนโทรติดต่อจริง
+
+3. **ตาราง `policy_sales` (บันทึกการขายกรมธรรม์ที่ปิดสำเร็จ)**:
+   - **ที่มา**: ดึงเฉพาะรายการที่ลูกค้าตอบตกลงทำประกันจาก `campaign_leads` (เงื่อนไข: `label IN (1, 2)`)
+   - **Business Rules ในการแปลงค่า**:
+     - `label = 1` -> กำหนด `product_type = 'PA Insurance'` และตั้งค่าเบี้ยประกันภัยเฉลี่ย `premium_amount = 2,500.00 บาท`
+     - `label = 2` -> กำหนด `product_type = 'Life Insurance'` และตั้งค่าเบี้ยประกันภัยเฉลี่ย `premium_amount = 18,000.00 บาท`
+     - ออกรหัสกรมธรรม์ไม่ซ้ำ เช่น `POL-YYYYMM-LEADID`
+
+4. **ตาราง `agent_monthly_performance` (สรุปผลงานและการประเมิน KPI รายเดือน)**:
+   - **ที่มา**: รัน Batch สรุปยอดขายจากตาราง `policy_sales` ในแต่ละเดือนและจัดกลุ่มรายตัวแทน (`GROUP BY agent_id, campaign_month`)
+   - **ฟังก์ชันการคำนวณและ State Tracking**:
+     - `total_premium` = $\sum(\text{premium\_amount})$
+     - `new_policy_count` = $\text{Count}(\text{policy\_id})$
+     - ตรวจสอบกฎเกณฑ์: `total_premium > 15,000` และ `new_policy_count > 5`
+     - จัดการตัวนับต่อเนื่อง (Consecutive Counters): หากรอบนี้ Pass จะบวก `consecutive_pass_months` เพิ่ม 1 และรีเซ็ต `consecutive_fail_months` เป็น 0 (และในทางกลับกัน)
+     - ตัดสินใจปรับสถานะสัญญา: หากสะสม Fail ครบ 3 เดือนจะเปลี่ยนสถานะเป็น `COMMISSION_BASED` และหากสะสม Pass ครบ 3 เดือนจะเปลี่ยนเป็น `SALARY_BASED`
+
+5. **ตาราง `agent_contract_history` (ประวัติการปรับเปลี่ยนประเภทสัญญา - Audit Log)**:
+   - **ที่มา**: บันทึกอัตโนมัติเฉพาะเมื่อมีเหตุการณ์เปลี่ยนประเภทสัญญาเกิดขึ้นในตาราง `agent_monthly_performance` (`contract_changed = TRUE`)
+   - **จุดประสงค์ทางกฎหมายและการบริหาร**: เป็นตารางประวัติศาสตร์ที่ไม่สามารถแก้ไขย้อนหลังได้ (Append-Only) เพื่อใช้เป็นหลักฐานในการตรวจสอบ (Audit Trail) ในการจ่ายผลตอบแทน คอมมิชชัน และการบริหารสัญญาจ้างตามกฎระเบียบบริษัท
+
+---
+
+#### 2. กฎการประเมิน KPI รายเดือน (Monthly Validation Rules)
 ในแต่ละรอบเดือน ตัวแทนขายจะต้องผ่านเกณฑ์ 2 ข้อพร้อมกัน (AND Logic):
 1. **ยอดเบี้ยประกันภัยรวม (Total Premium)**: ต้องมากกว่า **15,000.00 บาท**
    ```sql
@@ -274,7 +339,7 @@ erDiagram
    END
    ```
 
-#### 2. กลไกการปรับเปลี่ยนประเภทสัญญาจ้างอัตโนมัติ (Automated State Transitions)
+#### 3. กลไกการปรับเปลี่ยนประเภทสัญญาจ้างอัตโนมัติ (Automated State Transitions)
 ประเภทสัญญาจ้างแบ่งเป็น:
 - `SALARY_BASED`: มีเงินเดือนประจำ + ค่าคอมมิชชัน
 - `COMMISSION_BASED`: ไม่มีเงินเดือนประจำ รับค่าตอบแทนตามผลงาน 100%
