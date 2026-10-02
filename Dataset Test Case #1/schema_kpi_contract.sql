@@ -1,17 +1,3 @@
--- ==============================================================================
--- Schema: Sales Agent KPI Performance & Contract Transition Tracking
--- System: InsureX Performance Management System
--- Integration: เชื่อมโยงกับ Dataset dsc_test_case.csv (Customer Campaign Leads)
--- Purpose:
---   1. เชื่อมโยงรายชื่อลูกค้าจากแคมเปญ (dsc_test_case.csv) กับตัวแทนขาย (Agents)
---   2. บันทึกผลการปิดการขายกรมธรรม์ (label=1: PA Insurance, label=2: Life Insurance)
---   3. ประเมินผลงานรายเดือน (Monthly KPI):
---      - เกณฑ์ผ่าน (PASS): ยอดเบี้ยรวม > 15,000 บาท AND จำนวนกรมธรรม์ใหม่ > 5 เล่ม/เดือน
---   4. ปรับเปลี่ยนประเภทสัญญาจ้างอัตโนมัติ (Automated Contract Transition):
---      - FAIL ติดต่อกัน 3 เดือน -> เปลี่ยนเป็น COMMISSION_BASED
---      - PASS ติดต่อกัน 3 เดือน -> เปลี่ยนเป็น SALARY_BASED
--- ==============================================================================
-
 -- 1. ตารางข้อมูลตัวแทนขายและสัญญาปัจจุบัน (Agents)
 CREATE TABLE IF NOT EXISTS agents (
     agent_id VARCHAR(36) PRIMARY KEY,
